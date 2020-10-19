@@ -1,4 +1,4 @@
-Exploratory analysis
+Strings and Factors
 ================
 
 ## Strings and regex
@@ -133,4 +133,50 @@ fct\_reorder
 
 str\_count str\_locate str\_extract
 
-## NSDUH
+## NSDUH – strings
+
+``` r
+url = "http://samhda.s3-us-gov-west-1.amazonaws.com/s3fs-public/field-uploads/2k15StateFiles/NSDUHsaeShortTermCHG2015.htm"
+
+drug_use_html = read_html(url)
+
+table_marj =
+  drug_use_html %>% 
+  html_nodes(css = "table") %>% 
+  first() %>% 
+  html_table() %>%
+  slice(-1) %>% 
+  as_tibble()
+```
+
+``` r
+table_marj %>%
+  select(-contains("P Value")) %>% # very similar to str_detect
+  pivot_longer(
+    -State,
+    names_to = "age_year",
+    values_to = "percent"
+  ) %>%
+  separate(age_year, into = c("age", "year"), sep = "\\(") %>%
+  mutate(
+    year = str_replace(year, "\\)", ""),
+    percent = str_replace(percent, "[a-c]$", ""),
+    percent = as.numeric(percent)
+  ) %>%
+  filter(!(State %in% c("Total U.S.", "Northeast", "Midwest", "South", "West")))
+```
+
+    ## # A tibble: 510 x 4
+    ##    State   age   year      percent
+    ##    <chr>   <chr> <chr>       <dbl>
+    ##  1 Alabama 12+   2013-2014    9.98
+    ##  2 Alabama 12+   2014-2015    9.6 
+    ##  3 Alabama 12-17 2013-2014    9.9 
+    ##  4 Alabama 12-17 2014-2015    9.71
+    ##  5 Alabama 18-25 2013-2014   27.0 
+    ##  6 Alabama 18-25 2014-2015   26.1 
+    ##  7 Alabama 26+   2013-2014    7.1 
+    ##  8 Alabama 26+   2014-2015    6.81
+    ##  9 Alabama 18+   2013-2014    9.99
+    ## 10 Alabama 18+   2014-2015    9.59
+    ## # … with 500 more rows
