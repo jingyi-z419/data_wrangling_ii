@@ -1,45 +1,23 @@
----
-title: "Exploratory analysis"
-output: github_document
----
-
-```{r setup, include = FALSE}
-library(tidyverse)
-
-library(p8105.datasets)
-library(rvest)
-
-
-knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.asp = .6,
-  out.width = "90%"
-)
-
-theme_set(theme_minimal() + theme(legend.position = "bottom"))
-          
-options(
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill = "viridis"
-)
-
-scale_colour_discrete = scale_colour_viridis_d
-scale_fill_discrete = scale_fill_viridis_d
-```
-
+Exploratory analysis
+================
 
 ## Strings and regex
 
-```{r}
+``` r
 string_vec = c("my", "name", "is", "jingyi")
 
 str_detect(string_vec, "jingyi")  #or a single letter will detect anything contains that particular letter, case sensitive
+```
 
+    ## [1] FALSE FALSE FALSE  TRUE
+
+``` r
 str_replace(string_vec, "jingyi", "Jingyi") #replace some things
 ```
 
+    ## [1] "my"     "name"   "is"     "Jingyi"
 
-```{r}
+``` r
 string_vec = c(
   "i think we all rule for participating",
   "i think i have been caught",
@@ -48,11 +26,17 @@ string_vec = c(
 )
 
 str_detect(string_vec, "^i think") #detect sth begins with...
+```
+
+    ## [1]  TRUE  TRUE  TRUE FALSE
+
+``` r
 str_detect(string_vec, "i think$") #detect sth ends with...
 ```
 
+    ## [1] FALSE FALSE FALSE  TRUE
 
-```{r}
+``` r
 string_vec = c(
   "Y' all remember Pres. HW Bush?",
   "I saw a green bush",
@@ -63,7 +47,9 @@ string_vec = c(
 str_detect(string_vec, "[Bb]ush") #capital or lower case "b"
 ```
 
-```{r}
+    ## [1]  TRUE  TRUE  TRUE FALSE
+
+``` r
 string_vec = c(
   '7th inning stretch',
   '1st half soon to begin. Texas won the toss.',
@@ -75,8 +61,9 @@ string_vec = c(
 str_detect(string_vec, "[0-9][a-zA-Z]")
 ```
 
+    ## [1]  TRUE  TRUE FALSE  TRUE
 
-```{r}
+``` r
 string_vec = c(
   'Its 7:11 in the evening',
   'want to go to 7-11?',
@@ -85,11 +72,17 @@ string_vec = c(
 )
 
 str_detect(string_vec, "7.11") # . will match anything
+```
+
+    ## [1]  TRUE  TRUE FALSE  TRUE
+
+``` r
 str_detect(string_vec, "7\\.11") # an actual . between two numbers
 ```
 
+    ## [1] FALSE FALSE FALSE  TRUE
 
-```{r}
+``` r
 string_vec = c(
   'The CI is [2, 5]',
   ':-]',
@@ -100,48 +93,44 @@ string_vec = c(
 str_detect(string_vec, "\\[") # anything has "["
 ```
 
+    ## [1]  TRUE FALSE  TRUE  TRUE
+
 ## Factors
 
-```{r}
+``` r
 factor_vec = factor(c("male", "male", "female", "female"))
 
 factor_vec
+```
 
+    ## [1] male   male   female female
+    ## Levels: female male
+
+``` r
 as.numeric(factor_vec) # female = 1, male = 2
 ```
 
+    ## [1] 2 2 1 1
+
 what happens if i relevel
 
-```{r}
+``` r
 factor_vec = fct_relevel(factor_vec, "male") #  you can move factors by hand
 
 factor_vec
+```
 
+    ## [1] male   male   female female
+    ## Levels: male female
+
+``` r
 as.numeric(factor_vec) # male = 1, female = 2
 ```
 
-fct_reorder
+    ## [1] 1 1 2 2
 
-str_count
-str_locate
-str_extract
+fct\_reorder
+
+str\_count str\_locate str\_extract
 
 ## NSDUH
-
-```{r}
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
