@@ -144,7 +144,8 @@ table_marj =
 
 
 ```{r}
-table_marj %>%
+data_marj = 
+  table_marj %>%
   select(-contains("P Value")) %>% # very similar to str_detect
   pivot_longer(
     -State,
@@ -161,12 +162,35 @@ table_marj %>%
 ```
 
 
-```{r}
 
+## NSDUH -- factors
+
+fct_relevel
+
+```{r}
+data_marj %>%
+  filter(age == "12-17") %>%
+  mutate(State = fct_relevel(State, "Texas")) %>%  # move texas to the very first of the list
+  ggplot(aes(State, y = percent, color = year)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+fct_reorder
+
+```{r}
+data_marj %>%
+  filter(age == "12-17") %>%
+  mutate(State = fct_reorder(State, percent)) %>%
+  ggplot(aes(State, y = percent, color = year)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
 
+```{r}
 
+```
 
 
 

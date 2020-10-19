@@ -150,7 +150,8 @@ table_marj =
 ```
 
 ``` r
-table_marj %>%
+data_marj = 
+  table_marj %>%
   select(-contains("P Value")) %>% # very similar to str_detect
   pivot_longer(
     -State,
@@ -166,17 +167,30 @@ table_marj %>%
   filter(!(State %in% c("Total U.S.", "Northeast", "Midwest", "South", "West")))
 ```
 
-    ## # A tibble: 510 x 4
-    ##    State   age   year      percent
-    ##    <chr>   <chr> <chr>       <dbl>
-    ##  1 Alabama 12+   2013-2014    9.98
-    ##  2 Alabama 12+   2014-2015    9.6 
-    ##  3 Alabama 12-17 2013-2014    9.9 
-    ##  4 Alabama 12-17 2014-2015    9.71
-    ##  5 Alabama 18-25 2013-2014   27.0 
-    ##  6 Alabama 18-25 2014-2015   26.1 
-    ##  7 Alabama 26+   2013-2014    7.1 
-    ##  8 Alabama 26+   2014-2015    6.81
-    ##  9 Alabama 18+   2013-2014    9.99
-    ## 10 Alabama 18+   2014-2015    9.59
-    ## # … with 500 more rows
+## NSDUH – factors
+
+fct\_relevel
+
+``` r
+data_marj %>%
+  filter(age == "12-17") %>%
+  mutate(State = fct_relevel(State, "Texas")) %>%  # move texas to the very first of the list
+  ggplot(aes(State, y = percent, color = year)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+<img src="strings_and_factors_files/figure-gfm/unnamed-chunk-11-1.png" width="90%" />
+
+fct\_reorder
+
+``` r
+data_marj %>%
+  filter(age == "12-17") %>%
+  mutate(State = fct_reorder(State, percent)) %>%
+  ggplot(aes(State, y = percent, color = year)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+<img src="strings_and_factors_files/figure-gfm/unnamed-chunk-12-1.png" width="90%" />
